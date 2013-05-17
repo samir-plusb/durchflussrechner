@@ -1,15 +1,6 @@
-@font-face {
-  font-family: 'Voces';
-  font-style: normal;
-  font-weight: 400;
-  src: url(voces.eot);
-  src: local('Voces'), local('Voces-Regular'), url(http://themes.googleusercontent.com/static/fonts/voces/v1/UOrhtr4tgkrQ7HpJQ9-OIQ.eot) format('embedded-opentype'), url(http://themes.googleusercontent.com/static/fonts/voces/v1/ePr7eRI28zZaOtQ8CcT7rA.woff) format('woff');
-}
- 
- 
 body
 {
-    font-family: Segoe UI;
+    font-family:'DroidSansRegular',DroidSansRegular,Arial,'Helvetica Neue',Helvetica,sans-serif ;
     font-size: 1.0em;
 }
  
@@ -21,20 +12,22 @@ body
 .calculator {
     display: inline-block;
     text-align: left;
-    padding: 16px;
+    padding:15px 0 0 30px;
+}
+
+label {
+    width:70px;
+    float:left;
+    margin-left:90px;
 }
  
 .display {
     display: block;
-	overflow:hidden;
+    overflow:hidden;
     text-align: right;
     color: black;
-    font-family: Voces, 'Segoe UI Semibold', Calibri, Arial, Helvetica;
-    font-size: 1.0em;
-    padding: 0px 4px 1px 4px;
-    border-radius: 2px;
+    font-size: 1.0em;  
     margin:0;
-	border:1px solid black;
 }
  
 .row {
@@ -44,7 +37,7 @@ body
 /* Linke Seite */
 .left {
 	float:left;
-	max-width:160px;
+	max-width:145px;
 }
 .left .button {
 	width:70px;
@@ -75,7 +68,7 @@ div.yellow {
 float:left;
 margin-left:30px;
 }
-.middle .button_right_no_corner {
+.middle .button_right_no_corner, .right .button_right_no_corner {
 	border-radius: 10px 0px 0px 10px;
 
 	}
@@ -85,9 +78,12 @@ margin-left:30px;
 	border-right: 1px solid #4db3d5;
 	margin-left:-4px;
 	}
-.middle .button_left_no_corner {
+.middle .button_left_no_corner, .right .button_left_no_corner {
 	border-radius: 0px 10px 10px 0px;
 	margin-left:-5px;
+}
+.right .button_left_no_corner {
+    border-left:1px solid #4db3d5;
 }
 
 /*  Rechte Seite des Rechners */
@@ -157,8 +153,18 @@ max-width:145px;
 
  
  
-/* Gradients */
- 
+/* ergebnis */
+#result {
+    float:right;
+    text-align: right;
+    padding-right:20px;
+    width:330px;
+    -moz-box-shadow: inset 0 0 5px 1px #aaa;
+    -webkit-box-shadow: inset 0 0 5px 1px#aaa;
+    box-shadow: inset 0 0 5px 1px #aaa;
+    margin-right:15px;
+}
+
  
 /* Windows Phone-size phone */
  
