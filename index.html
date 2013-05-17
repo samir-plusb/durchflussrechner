@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+		<script src="js/calc.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
+
+     
+
+        <div class="container">
+			<div id="result" class="display graygradient smallshadow">0</div>
+				<div class="calculator">
+					<div class="row left">
+						<div class="large">
+							<div class="button" onmousedown="javascript:allclear();"><span class="button-label">CV</span></div>
+							<div class="button" onmousedown="javascript:clearentry();"><span class="button-label">Durchfluss</span></div>
+						</div>	
+						<div class="button yellow" onmousedown="javascript:backspace();"><div class="button-label">CE</div></div>
+						<div class="button yellow" onmousedown="javascript:clearentry();"><div class="button-label">C</div></div>
+						<div class="button clear" onmousedown="javascript:backspace();"><div class="button-label">a</div></div>
+						<div class="button" onmousedown="javascript:clearentry();"><div class="button-label">b</div></div>	
+					</div>
+					<div class="middle">
+						<div class="row">
+							<div class="button button_right_no_corner" onmousedown="javascript:nine();"><div class="button-label">9</div></div>
+							<div class="button button_no_corner" onmousedown="javascript:eight();"><div class="button-label">8</div></div>
+							<div class="button button_left_no_corner" onmousedown="javascript:seven();"><div class="button-label">7</div></div>
+						</div>
+						<div class="row">
+							<div class="button button_right_no_corner" onmousedown="javascript:six();"><div class="button-label">6</div></div>
+							<div class="button button_no_corner" onmousedown="javascript:five();"><div class="button-label">5</div></div>
+							<div class="button button_left_no_corner" onmousedown="javascript:four();"><div class="button-label">4</div></div>
+						</div>
+						<div class="row">
+							<div class="button button_right_no_corner" onmousedown="javascript:three();"><div class="button-label">3</div></div>
+							<div class="button button_no_corner" onmousedown="javascript:two();"><div class="button-label">2</div></div>
+							<div class="button button_left_no_corner" onmousedown="javascript:one();"><div class="button-label">1</div></div>
+						</div>
+						<div class="row">
+							<div class="button button_right_no_corner " onmousedown="javascript:zero();"><div class="button-label">0</div></div>
+							<div class="button blue button_no_corner" onmousedown="javascript:add();"><div class="button-symbol">+ &nbsp; -</div></div>
+							<div class="button button_left_no_corner"><div class="button-symbol">,</div></div>
+						</div>
+					</div>	
+					<div class="right row">
+						<div class="button smallshadow" onmousedown="javascript:decimal();"><div class="button-label">.</div></div>
+						<div class="button blue smallshadow" onmousedown="javascript:percent();"><div class="button-label">%</div></div>
+						<div class="button blue smallshadow raise last" onmousedown="javascript:equals();"><div class="button-symbol">=</div></div>
+						<div class="button blue smallshadow last" onmousedown="javascript:divide();"><div class="button-symbol">÷</div></div>
+						<div class="button blue smallshadow raise last" onmousedown="javascript:subtract();"><div class="button-symbol">-</div></div>
+						<div class="button blue smallshadow raise last" onmousedown="javascript:multiply();"><div class="button-symbol">×</div></div>
+						<div class="button blue smallshadow raise last" onmousedown="javascript:multiply();"><div class="button-symbol">&radic;</div></div>
+						<div class="button blue smallshadow raise last" onmousedown="javascript:multiply();"><div class="button-symbol">&frac14;</div></div>
+					</div>
+				</div>   
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+        <script src="js/vendor/bootstrap.min.js"></script>
+
+        <script src="js/main.js"></script>
+    </body>
+</html>
