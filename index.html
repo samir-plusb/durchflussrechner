@@ -21,7 +21,10 @@
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-		<script src="js/calc.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/durchflussrechner.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -34,16 +37,16 @@
 
         <div class="container">
 			<div id="result" class="display graygradient smallshadow">0</div>
-				<div class="calculator">
+				<div class="durchflussrechner">
 					<div class="row left">
 						<div class="large">
-							<div class="button" onmousedown="javascript:allclear();"><span class="button-label">CV</span></div>
-							<div class="button" onmousedown="javascript:clearentry();"><span class="button-label">Durchfluss</span></div>
+                                                        <div id="CV" class="button"><span class="button-label">CV</span></div>
+							<div id="Durchfluss" class="button"><span class="button-label">Durchfluss</span></div>
 						</div>	
-						<div class="button yellow" onmousedown="javascript:backspace();"><div class="button-label">CE</div></div>
-						<div class="button yellow" onmousedown="javascript:clearentry();"><div class="button-label">C</div></div>
-						<div class="button clear" onmousedown="javascript:backspace();"><div class="button-label">a</div></div>
-						<div class="button" onmousedown="javascript:clearentry();"><div class="button-label">b</div></div>	
+                                                <div id="CE" class="button yellow" onmousedown="javascript:backspace();"><div class="button-label">CE</div></div>
+						<div id="C" class="button yellow" onmousedown="javascript:clearentry();"><div class="button-label">C</div></div>
+						<div id="a" class="button clear" onmousedown="javascript:backspace();"><div class="button-label">a</div></div>
+						<div id="b" class="button" onmousedown="javascript:clearentry();"><div class="button-label">b</div></div>	
 					</div>
 					<div class="middle">
 						<div class="row">
@@ -79,12 +82,5 @@
 					</div>
 				</div>   
         </div> <!-- /container -->
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-
-        <script src="js/vendor/bootstrap.min.js"></script>
-
-        <script src="js/main.js"></script>
     </body>
 </html>
