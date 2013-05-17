@@ -10,14 +10,14 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+       <link rel="stylesheet" href="css/bootstrap.min.css">
         <style>
             body {
                 padding-top: 60px;
                 padding-bottom: 40px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+       <!-- <link rel="stylesheet" href="css/bootstrap-responsive.min.css">-->
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -35,9 +35,10 @@
 
      
 
-        <div class="container">
-			<div id="result" class="display graygradient smallshadow">0</div>
-				<div class="durchflussrechner">
+        <div class="container test">
+            <label>Ergebnis:</label>
+			<div id="result">0</div>
+				<div class="calculator">
 					<div class="row left">
 						<div class="large">
                                                         <div id="CV" class="button"><span class="button-label">CV</span></div>
@@ -71,14 +72,14 @@
 						</div>
 					</div>	
 					<div class="right row">
-						<div class="button smallshadow" onmousedown="javascript:decimal();"><div class="button-label">.</div></div>
-						<div class="button blue smallshadow" onmousedown="javascript:percent();"><div class="button-label">%</div></div>
-						<div class="button blue smallshadow raise last" onmousedown="javascript:equals();"><div class="button-symbol">=</div></div>
-						<div class="button blue smallshadow last" onmousedown="javascript:divide();"><div class="button-symbol">÷</div></div>
-						<div class="button blue smallshadow raise last" onmousedown="javascript:subtract();"><div class="button-symbol">-</div></div>
-						<div class="button blue smallshadow raise last" onmousedown="javascript:multiply();"><div class="button-symbol">×</div></div>
-						<div class="button blue smallshadow raise last" onmousedown="javascript:multiply();"><div class="button-symbol">&radic;</div></div>
-						<div class="button blue smallshadow raise last" onmousedown="javascript:multiply();"><div class="button-symbol">&frac14;</div></div>
+						<div class="button button_right_no_corner" onmousedown="javascript:decimal();"><div class="button-label">.</div></div>
+						<div class="button button_left_no_corner" onmousedown="javascript:percent();"><div class="button-label">%</div></div>
+						<div class="button button_right_no_corner raise last" onmousedown="javascript:equals();"><div class="button-symbol">=</div></div>
+						<div class="button button_left_no_corner last" onmousedown="javascript:divide();"><div class="button-symbol">÷</div></div>
+						<div class="button button_right_no_corner raise last" onmousedown="javascript:subtract();"><div class="button-symbol">-</div></div>
+						<div class="button button_left_no_corner raise last" onmousedown="javascript:multiply();"><div class="button-symbol">×</div></div>
+						<div class="button button_right_no_corner raise last" onmousedown="javascript:multiply();"><div class="button-symbol">&radic;</div></div>
+						<div class="button button_left_no_corner raise last" onmousedown="javascript:multiply();"><div class="button-symbol">&frac14;</div></div>
 					</div>
 				</div>   
         </div> <!-- /container -->
