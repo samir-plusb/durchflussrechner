@@ -10,6 +10,12 @@
     GASE: 0,
     FLUESSIGKEITEN: 1
   };
+  
+  rechnermodus = {
+    RECHNER: 'Rechner',
+    DURCHFLUSS: 'Durchfluss',
+    CV: 'CV'
+  };
 
   var Durchflussrechner = function(id) {
     var self = this;
@@ -21,6 +27,7 @@
     this.operand = null;
     this.operation = null;
     this.state = state.PUSH;
+    this.rechnermodus = rechnermodus.RECHNER;
 
     /**
      * Wir müssen prüfen, ob bereits ein Dezimal-Zeichen eingegeben wurde oder nicht
@@ -63,7 +70,7 @@
 //            console.log('OPERAND 2', self.operand);
 
             if(self.operation !== null){
-              self.setResult(self.operation(self.getResult(), self.operand));
+              self.setResult(self.operation(self.operand, self.getResult()));
               self.state = state.NEW;
             }
 //            self.operation = null;
@@ -80,6 +87,9 @@
              */
             self.toggleView($(button).attr('id'));
             
+          } else if($(button).hasClass('fluss_operation')){
+            var fluss_function = self.getFunctionByName($(button).attr('id'));
+            self.setResult(fluss_function());
           }
         });
       });
@@ -205,8 +215,9 @@
      */
     Durchflussrechner.prototype.toggleView = function(id){
       $('#' + this.id + ' .middle').css('display', 'none');
+      this.rechnermodus = id;
       
-      if(id === 'CV' || id === 'Durchfluss'){
+      if(id === rechnermodus.CV || id === rechnermodus.DURCHFLUSS){
 
         $('#' + this.id + ' #Fluss_view')
               .css('display', 'block')                                                   //View anzeigen
@@ -230,12 +241,14 @@
             break;
         }
         
-      }else if(id === 'Rechner'){
+      }else if(id === rechnermodus.RECHNER){
         $('#' + this.id + ' #Rechner_view').css('display', 'block')                                                   //View anzeigen
         $('#' + this.id + ' .button#Rechner').css('display', 'none');
         $('#' + this.id + ' .button#CE, .button#clear').css('display', 'inline-block');
         $('#' + this.id +  ' .right').css('display', 'block');
       }
+      
+      
     };
     
     
@@ -284,6 +297,53 @@
     Durchflussrechner.prototype.fraction_1_x = function(x) {
       return 1 / x;
     };    
+    
+    Durchflussrechner.prototype.berechneFluss = function() {
+      var result = 0;
+      var type = parseInt($('#' + self.id +  ' #durchflusstype').val());
+      switch(self.rechnermodus){
+        case rechnermodus.CV:
+          result = self.berechneCV(type);
+          break;
+        case rechnermodus.DURCHFLUSS:
+          result = self.berechneDurchfluss(type);
+          break;
+        default:
+          window.alert('Der Rechner ist im Falschen Modus');
+          return null;
+          break;
+      }
+      return result;
+    };
+    
+    Durchflussrechner.prototype.berechneCV = function(type) {
+      switch(type){
+        case durchflusstype.GASE:
+          return 111112;
+          break;
+        case durchflusstype.FLUESSIGKEITEN:
+          return 1111113;
+          break;
+        default:
+          window.alert('Bitte auswählen...');
+           break;
+      }
+    };
+    
+    Durchflussrechner.prototype.berechneDurchfluss = function(type) {
+      switch(type){
+        case durchflusstype.GASE:
+          return 2222221;
+          break;
+        case durchflusstype.FLUESSIGKEITEN:
+          return 22222223;
+          break;
+        default:
+          window.alert('Bitte auswählen...');
+           break;
+      }
+    };
+    
     
     /**
      * 
