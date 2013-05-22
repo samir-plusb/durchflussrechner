@@ -5,6 +5,11 @@
     NEW: 0,
     PUSH: 1
   };
+  
+  durchflusstype = {
+    GASE: 0,
+    FLUESSIGKEITEN: 1
+  };
 
   var Durchflussrechner = function(id) {
     var self = this;
@@ -68,6 +73,13 @@
             var transformation = self.getFunctionByName($(button).attr('id'));
             self.setResult(transformation(self.getResult()));
 
+          } else if($(button).hasClass('switch_view')){
+            
+            /**
+             * Es gibt drei Buttons, mit denen wir verschiedene Views umschalten müssen
+             */
+            self.toggleView($(button).attr('id'));
+            
           }
         });
       });
@@ -78,7 +90,7 @@
       /**
        * Wenn im Markup ein Komma eingegeben wurde, richten wir alles auf Kommata ein
        */
-      var komma = ($('#' + id + ' #decimal').text().indexOf(',') >= 0);
+      var komma = ($('#' + self.id + ' #decimal').text().indexOf(',') >= 0);
       var decimal = '.';
       if (komma) {
         decimal = ',';
@@ -127,12 +139,12 @@
          */
       }
       
-      $('#' + id + ' ' + '#result').html(result_display);
+      $('#' + self.id + ' ' + '#result').html(result_display);
       console.log('self.result', self.result);
     };
 
     Durchflussrechner.prototype.getResult = function() {
-      this.result = parseFloat($('#' + id + ' ' + '#result').text());
+      this.result = parseFloat($('#' + self.id + ' ' + '#result').text());
       return this.result;
     };
 
@@ -181,6 +193,47 @@
         }
       }
       return myFunction;
+    };
+    
+    /**
+     * Diese Funktion kümmert sich um die Anzeige der passenden View. Dazu muss die passende id
+     * 'Durchfluss', 'CV' oder 'Rechner' übergeben werden 
+     *
+     * 
+     * @param string id
+     * @returns
+     */
+    Durchflussrechner.prototype.toggleView = function(id){
+      $('#' + this.id + ' .middle').css('display', 'none');
+      
+      if(id === 'CV' || id === 'Durchfluss'){
+
+        $('#' + this.id + ' #Fluss_view')
+              .css('display', 'block')                                                   //View anzeigen
+              .css('width', $('#' + this.id + ' .middle#Rechner_view').css('width'))     //Breite angleichen
+              .css('height', $('#' + this.id + ' .middle#Rechner_view').css('height'));  //Höhe angleichen
+        
+        $('#' + this.id + ' .button#Rechner').css('display', 'block');
+        $('#' + this.id +  ' .button#CE, .button#clear').css('display', 'none');
+        
+        switch (id){
+          case 'CV':
+            $('#' + this.id + ' .' + id + '_view').css('display', 'block');
+            $('#' + this.id + ' .Durchfluss_view').css('display', 'none');
+            break;
+          case 'Durchfluss':
+            $('#' + this.id + ' .' + id + '_view').css('display', 'block');
+            $('#' + this.id + ' .CV_view').css('display', 'none');
+            break;
+          default:
+            break;
+        }
+        
+      }else if(id === 'Rechner'){
+        $('#' + this.id + ' #Rechner_view').css('display', 'block')                                                   //View anzeigen
+        $('#' + this.id + ' .button#Rechner').css('display', 'none');
+        $('#' + this.id + ' .button#CE, .button#clear').css('display', 'inline-block');
+      }
     };
     
     
