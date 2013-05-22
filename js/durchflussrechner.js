@@ -215,6 +215,7 @@
         
         $('#' + this.id + ' .button#Rechner').css('display', 'block');
         $('#' + this.id +  ' .button#CE, .button#clear').css('display', 'none');
+        $('#' + this.id +  ' .right').css('display', 'none');
         
         switch (id){
           case 'CV':
@@ -233,6 +234,7 @@
         $('#' + this.id + ' #Rechner_view').css('display', 'block')                                                   //View anzeigen
         $('#' + this.id + ' .button#Rechner').css('display', 'none');
         $('#' + this.id + ' .button#CE, .button#clear').css('display', 'inline-block');
+        $('#' + this.id +  ' .right').css('display', 'block');
       }
     };
     
