@@ -3,85 +3,86 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
 
-       <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
-        </style>
-       <!-- <link rel="stylesheet" href="css/bootstrap-responsive.min.css">-->
-        <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <!-- <link rel="stylesheet" href="css/bootstrap-responsive.min.css">-->
+    <link rel="stylesheet" href="css/main.css">
 
-        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-        <script src="js/vendor/bootstrap.min.js"></script>
-        <script src="js/durchflussrechner.js"></script>
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
+    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/durchflussrechner.js"></script>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
 
-        <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
+    <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
 
-     
 
-        <div class="container test">
-            <label>Ergebnis:</label>
-			<div id="result">0</div>
-				<div class="calculator">
-					<div class="row left">
-						<div class="large">
-                                                        <div id="CV" class="button"><span class="button-label">CV</span></div>
-							<div id="Durchfluss" class="button"><span class="button-label">Durchfluss</span></div>
-						</div>	
-                                                <div id="CE" class="button yellow" onmousedown="javascript:backspace();"><div class="button-label">CE</div></div>
-						<div id="C" class="button yellow" onmousedown="javascript:clearentry();"><div class="button-label">C</div></div>
-						<div id="a" class="button clear" onmousedown="javascript:backspace();"><div class="button-label">a</div></div>
-						<div id="b" class="button" onmousedown="javascript:clearentry();"><div class="button-label">b</div></div>	
-					</div>
-					<div class="middle">
-						<div class="row">
-							<div class="button button_right_no_corner" onmousedown="javascript:nine();"><div class="button-label">9</div></div>
-							<div class="button button_no_corner" onmousedown="javascript:eight();"><div class="button-label">8</div></div>
-							<div class="button button_left_no_corner" onmousedown="javascript:seven();"><div class="button-label">7</div></div>
-						</div>
-						<div class="row">
-							<div class="button button_right_no_corner" onmousedown="javascript:six();"><div class="button-label">6</div></div>
-							<div class="button button_no_corner" onmousedown="javascript:five();"><div class="button-label">5</div></div>
-							<div class="button button_left_no_corner" onmousedown="javascript:four();"><div class="button-label">4</div></div>
-						</div>
-						<div class="row">
-							<div class="button button_right_no_corner" onmousedown="javascript:three();"><div class="button-label">3</div></div>
-							<div class="button button_no_corner" onmousedown="javascript:two();"><div class="button-label">2</div></div>
-							<div class="button button_left_no_corner" onmousedown="javascript:one();"><div class="button-label">1</div></div>
-						</div>
-						<div class="row">
-							<div class="button button_right_no_corner " onmousedown="javascript:zero();"><div class="button-label">0</div></div>
-							<div class="button blue button_no_corner" onmousedown="javascript:add();"><div class="button-symbol">+ &nbsp; -</div></div>
-							<div class="button button_left_no_corner"><div class="button-symbol">,</div></div>
-						</div>
-					</div>	
-					<div class="right row">
-						<div class="button button_right_no_corner" onmousedown="javascript:decimal();"><div class="button-label">.</div></div>
-						<div class="button button_left_no_corner" onmousedown="javascript:percent();"><div class="button-label">%</div></div>
-						<div class="button button_right_no_corner raise last" onmousedown="javascript:equals();"><div class="button-symbol">=</div></div>
-						<div class="button button_left_no_corner last" onmousedown="javascript:divide();"><div class="button-symbol">÷</div></div>
-						<div class="button button_right_no_corner raise last" onmousedown="javascript:subtract();"><div class="button-symbol">-</div></div>
-						<div class="button button_left_no_corner raise last" onmousedown="javascript:multiply();"><div class="button-symbol">×</div></div>
-						<div class="button button_right_no_corner raise last" onmousedown="javascript:multiply();"><div class="button-symbol">&radic;</div></div>
-						<div class="button button_left_no_corner raise last" onmousedown="javascript:multiply();"><div class="button-symbol">&frac14;</div></div>
-					</div>
-				</div>   
-        </div> <!-- /container -->
-    </body>
+
+    <div id="durchflussrechner" class="container">
+      <label>Ergebnis:</label>
+      <div id="result">0</div>
+      <div id="operation_display">0</div>
+      <div class="calculator">
+        <div class="row left">
+          <div class="large">
+            <div id="CV" class="button"><span class="button-label">CV</span></div>
+            <div id="Durchfluss" class="button"><span class="button-label">Durchfluss</span></div>
+          </div>	
+          <div id="CE" class="button operation yellow"><div class="button-label">CE</div></div>
+          <div id="clear" class="button operation yellow" ><div class="button-label">C</div></div>
+          <div id="a" class="button operation clear"><div class="button-label">a</div></div>
+          <div id="b" class="button operation"><div class="button-label">b</div></div>	
+        </div>
+        <div class="middle">
+          <div class="row">
+            <div id="7" class="button number button_right_no_corner"><div class="button-label">7</div></div>
+            <div id="8" class="button number button_no_corner"><div class="button-label">8</div></div>
+            <div id="9" class="button number button_left_no_corner"><div class="button-label">9</div></div>
+          </div>
+          <div class="row">
+            <div id="6" class="button number button_right_no_corner"><div class="button-label">6</div></div>
+            <div id="5" class="button number button_no_corner"><div class="button-label">5</div></div>
+            <div id="4" class="button number button_left_no_corner"><div class="button-label">4</div></div>
+          </div>
+          <div class="row">
+            <div id="3" class="button number button_right_no_corner"><div class="button-label">3</div></div>
+            <div id="2" class="button number button_no_corner"><div class="button-label">2</div></div>
+            <div id="1" class="button number button_left_no_corner"><div class="button-label">1</div></div>
+          </div>
+          <div class="row">
+            <div id="0" class="button number button_right_no_corner"><div class="button-label">0</div></div>
+            <div id="negation" class="button transformation blue button_no_corner"><div class="button-symbol">+ &nbsp; -</div></div>
+            <div id="decimal" class="button decimal_sign button_left_no_corner"><div class="button-symbol">,</div></div>
+          </div>
+        </div>	
+        <div class="right row">
+          <div id="division" class="button operation button_right_no_corner"><div class="button-label">÷</div></div>
+          <div id="square_root" class="button transformation button_left_no_corner"><div class="button-label">&radic;</div></div>
+          <div id="multiplication" class="button operation button_right_no_corner raise last"><div class="button-symbol">×</div></div>
+          <div id="percent" class="button operation button_left_no_corner last"><div class="button-symbol">%</div></div>
+          <div id="subtraction" class="button operation button_right_no_corner raise last"><div class="button-symbol">-</div></div>
+          <div id="fraction_1_x" class="button transformation button_left_no_corner raise last"><div class="button-symbol"><sup>1</sup>&frasl;<sub>x</sub></div></div>
+          <div id="addition" class="button operation button_right_no_corner raise last"><div class="button-symbol">+</div></div>
+          <div id="equals" class="button equals button_left_no_corner raise last"><div class="button-symbol">=</div></div>
+        </div>
+      </div>   
+    </div> <!-- /container -->
+  </body>
 </html>
