@@ -167,8 +167,10 @@ max-width:145px;
 
 /* Durchfluss_view und CV_view sollen zu Beginn unsichtbar sein */
 
-#Fluss_view,
-#Rechner {
+#durchflussrechner #Fluss_view,
+#durchflussrechner #Rechner,
+#durchflussrechner .Fluessigkeiten_view
+{
   display: none;
 }
 

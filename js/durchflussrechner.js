@@ -28,6 +28,10 @@
     this.operation = null;
     this.state = state.PUSH;
     this.rechnermodus = rechnermodus.RECHNER;
+    
+    this.a = null;
+    this.b = null;
+    this.ab_speichern = false;
 
     /**
      * Wir müssen prüfen, ob bereits ein Dezimal-Zeichen eingegeben wurde oder nicht
@@ -52,7 +56,7 @@
             self.clearDisplay();
 
             /**
-             * bei der zweiten Operation muss die erste schon ausgeführt werden!!!
+             * TODO: bei der zweiten Operation muss die erste schon ausgeführt werden!!!
              */
 
 //            console.log('OPERAND 1', self.getResult());
@@ -93,6 +97,49 @@
           }
         });
       });
+      
+      /**
+       * Views für Flüssigkeit ein/ausblenden
+       */
+      $('#' + self.id + ' #durchflusstype').change(function(){
+        var value = parseFloat($(this).val());
+        switch(value){
+          case durchflusstype.FLUESSIGKEITEN:
+            $('#' + self.id + ' .Fluessigkeiten_view').css('display', 'block');
+            break;
+          case durchflusstype.GASE:
+            $('#' + self.id + ' .Fluessigkeiten_view').css('display', 'none');
+            break;            
+        }
+      });
+      
+      /**
+       * Funktionalität a/b speichern
+       */
+      $('#' + self.id + ' input#ab_speichern').change(function(){
+        self.ab_speichern = $(this).prop('checked');
+      });
+      
+      $('#' + self.id + ' #a,#b').click(function(){
+        
+        if(self.ab_speichern){
+          
+          //Wert speichern
+          self[$(this).attr('id')] = self.getResult();
+          $('#' + self.id + ' input#ab_speichern').prop('checked', false);
+          self.ab_speichern = false;
+          console.log(self.a, 'a');
+          console.log(self.b, 'b');
+        }else{
+          if(self[$(this).attr('id')] !== null){
+            self.setResult(self[$(this).attr('id')]);
+            self.state = state.NEW;
+          }
+        }
+        
+      });
+      
+      
     };
 
     Durchflussrechner.prototype.pushDisplay = function(value) {
@@ -262,11 +309,9 @@
       return x + y;
     };
 
-
     Durchflussrechner.prototype.subtraction = function(x, y) {
       return x - y;
     };
-
 
     Durchflussrechner.prototype.multiplication = function(x, y) {
       return x * y;
@@ -298,6 +343,26 @@
       return 1 / x;
     };    
     
+    
+    /**
+     * 
+     * Formeln für die Berechnung des Durchfluss und des CV-Werts
+     * 
+CV
+    Gase:
+        ((2*parameter.durchfluss_wert/28.3)/((parameter.eingangsdruck*14.5)+14.7))*Math.sqrt(parameter.gravitivität);
+    Flüssigkeiten:
+        (parameter.durchfluss_wert/3.78*Math.sqrt(parameter.gravitivität))/(Math.sqrt((parameter.eingangsdruck-parameter.ausgangsdruck)*14.5));
+
+Durchfluss
+    Gase:
+        Math.round(parameter.cv_wert*28.3/2/Math.sqrt(parameter.gravitivität)*((parameter.eingangsdruck*14.5)+14.7));
+    Flüssigkeiten:
+        Math.round(parameter.cv_wert/Math.sqrt(parameter.gravitivität)*(Math.sqrt(parameter.eingangsdruck-parameter.ausgangsdruck)*14.5)*3.78);
+     * 
+     * @returns parameter
+     */
+    
     Durchflussrechner.prototype.berechneFluss = function() {
       var result = 0;
       var type = parseInt($('#' + self.id +  ' #durchflusstype').val());
@@ -317,12 +382,14 @@
     };
     
     Durchflussrechner.prototype.berechneCV = function(type) {
+      var parameter = self.getCVParameter();
+      console.log('Parameter', parameter);
       switch(type){
         case durchflusstype.GASE:
-          return 111112;
+          return ((2*parameter.durchfluss_wert/28.3)/((parameter.eingangsdruck*14.5)+14.7))*Math.sqrt(parameter.gravitivitaet);
           break;
         case durchflusstype.FLUESSIGKEITEN:
-          return 1111113;
+          return (parameter.durchfluss_wert/3.78*Math.sqrt(parameter.gravitivitaet))/(Math.sqrt((parameter.eingangsdruck - parameter.ausgangsdruck)*14.5));
           break;
         default:
           window.alert('Bitte auswählen...');
@@ -331,17 +398,42 @@
     };
     
     Durchflussrechner.prototype.berechneDurchfluss = function(type) {
+      var parameter = self.getDurchflussParameter();
+      console.log('Parameter', parameter);
       switch(type){
         case durchflusstype.GASE:
-          return 2222221;
+          return Math.round(parameter.cv_wert*28.3/2/Math.sqrt(parameter.gravitivitaet)*((parameter.eingangsdruck*14.5)+14.7));
           break;
         case durchflusstype.FLUESSIGKEITEN:
-          return 22222223;
+          
+          console.log('cs_wert / Wurzel_Gravititvität', parameter.cv_wert/Math.sqrt(parameter.gravitivitaet));
+          console.log('Wurzel ein aus', (Math.sqrt(parameter.eingangsdruck - parameter.ausgangsdruck)*14.5));
+          
+          return Math.round(parameter.cv_wert/Math.sqrt(parameter.gravitivitaet)*(Math.sqrt(parameter.eingangsdruck - parameter.ausgangsdruck)*14.5)*3.78);
           break;
         default:
           window.alert('Bitte auswählen...');
            break;
       }
+    };
+    
+    Durchflussrechner.prototype.getDurchflussParameter = function(){
+      return {
+        cv_wert:       parseFloat($('#' + self.id + ' #cv_wert').val()), 
+        gravitivitaet: parseFloat($('#' + self.id + ' #gravitivitaet').val()), 
+        eingangsdruck: parseFloat($('#' + self.id + ' #eingangsdruck').val()), 
+        ausgangsdruck: parseFloat($('#' + self.id + ' #ausgangsdruck').val()), 
+      };
+    };
+    
+    
+    Durchflussrechner.prototype.getCVParameter = function(){
+      return {
+        durchfluss_wert:       parseFloat($('#' + self.id + ' #durchfluss_wert').val()), 
+        gravitivitaet:         parseFloat($('#' + self.id + ' #gravitivitaet').val()), 
+        eingangsdruck:         parseFloat($('#' + self.id + ' #eingangsdruck').val()), 
+        ausgangsdruck:         parseFloat($('#' + self.id + ' #ausgangsdruck').val()), 
+      };
     };
     
     
