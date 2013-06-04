@@ -23,61 +23,69 @@
     this.buttons = $('#' + id + ' .button');
     this.display = $('#' + id + ' #result');
 
+    this.precision = 12;
+    
+    /**
+     * Attribute initilisieren
+     */
     this.result = 0.0;
     this.operand = null;
     this.operation = null;
     this.state = state.PUSH;
-    this.rechnermodus = rechnermodus.RECHNER;
-    
     this.a = null;
     this.b = null;
     this.ab_speichern = false;
+    
+    this.rechnermodus = rechnermodus.RECHNER;
+    
 
     /**
      * Wir müssen prüfen, ob bereits ein Dezimal-Zeichen eingegeben wurde oder nicht
      */
     this.hasDecimal = false;
+    this.decimal = null;
 
 
     Durchflussrechner.prototype.initBindings = function() {
-      console.log(self.buttons);
 
       $(self.buttons).each(function(index, button) {
         $(button).mousedown(function() {
+          
           if ($(button).hasClass('number') || $(button).hasClass('decimal_sign')) {
             //Die angeklickte Zahl oder das Dezimal-Zeichen wird in das Display eingetragen
             self.pushDisplay($(button).text());
 
           } else if ($(button).hasClass('operation')) {
-
-            //Bei einem Klick auf eine Operation, wird diese in die Variable this.operation als Funktion eingetragen
-            var operation = self.getFunctionByName($(button).attr('id'));
-            self.setOperation(operation);
-            self.clearDisplay();
-
-            /**
-             * TODO: bei der zweiten Operation muss die erste schon ausgeführt werden!!!
-             */
-
-//            console.log('OPERAND 1', self.getResult());
-//            console.log('OPERATION', self.operation);
-//            console.log('OPERAND 2', self.operand);
+          
+            //Wenn keine Operation angegeben wurde, müssen wir den Operanden auf die letzte Eingabe setzen
+            if(self.operation === null){
+              self.operand = self.getResult();
+            }else{
+              //Wenn eine Operation einegegeben wurde, wird ein Zwischenergebnis generiert aus dem letzten Ergebnis mittels der Operation ausgeführt auf die aktuelle Eingabe
+              self.operand = self.operation(self.operand, self.getResult());
+            }
+            
+            //Nun setzen wir die neue Operation
+            self.operation = self.getFunctionByName($(button).attr('id'));            
+            
+            //Wir wollen, dass bei der nächsten Eingabe die Zahlen wieder eingeschoben werden
+            self.state = state.NEW;
+            
+            //Wir setzen das Zwischenergebnis ein
+            self.setResult(self.operand);
             
           } else if ($(button).hasClass('equals')) {
             
             /**
              * Wenn auf = geklickt wird, muss das Ergebnis berechnet und angezeigt werden
              */
-            
-//            console.log('OPERAND 1', self.getResult());
-//            console.log('OPERATION', self.operation);
-//            console.log('OPERAND 2', self.operand);
 
             if(self.operation !== null){
               self.setResult(self.operation(self.operand, self.getResult()));
               self.state = state.NEW;
+              self.operation = null;
             }
-//            self.operation = null;
+
           } else if ($(button).hasClass('transformation')) {
 
             //Die Zahl in der Anzeige wird transformiert, mittels der Operation, die angegeben wurde
@@ -94,23 +102,18 @@
           } else if($(button).hasClass('fluss_operation')){
             var fluss_function = self.getFunctionByName($(button).attr('id'));
             self.setResult(fluss_function());
+            
+          } else if($(button).attr('id') === 'CE'){
+            
+            self.setResult(0);
+            
+          } else if($(button).attr('id') === 'clear'){
+            
+            self.clearDurchflussrechner();
+            self.setResult(0);
+            
           }
         });
-      });
-      
-      /**
-       * Views für Flüssigkeit ein/ausblenden
-       */
-      $('#' + self.id + ' #durchflusstype').change(function(){
-        var value = parseFloat($(this).val());
-        switch(value){
-          case durchflusstype.FLUESSIGKEITEN:
-            $('#' + self.id + ' .Fluessigkeiten_view').css('display', 'block');
-            break;
-          case durchflusstype.GASE:
-            $('#' + self.id + ' .Fluessigkeiten_view').css('display', 'none');
-            break;            
-        }
       });
       
       /**
@@ -138,26 +141,24 @@
         }
         
       });
-      
-      
     };
 
+    /**
+     * 
+     * Diese Methode hängt eine neue Ziffer an die vorhandene Ziffer im Display an oder fügt eine neue an. 
+     * Dies hängt von dem Zustand des Taschenrechners ab, also self.state
+     * 
+     * @param {type} value
+     * @returns {unresolved}
+     */
     Durchflussrechner.prototype.pushDisplay = function(value) {
-      var oldNumber = this.display.html();
-      /**
-       * Wenn im Markup ein Komma eingegeben wurde, richten wir alles auf Kommata ein
-       */
-      var komma = ($('#' + self.id + ' #decimal').text().indexOf(',') >= 0);
-      var decimal = '.';
-      if (komma) {
-        decimal = ',';
-        oldNumber = oldNumber.replace(/,/g, '.');
-      }
+      self.checkDecimal();
+      var oldNumber = self.correctDecimalSign(this.display.html());
       var newNumber = (oldNumber === '0' || self.state === state.NEW) ? value.toString() : oldNumber + value.toString();
 
-      if (value === decimal) {
+      if (value === self.decimal) {
         if (!this.hasDecimal) {
-          newNumber = (parseFloat(oldNumber) === 0 || self.state === state.NEW) ? '0' + decimal : oldNumber + value.toString();
+          newNumber = (parseFloat(oldNumber.replace(/,/g, '.')) === 0 || self.state === state.NEW) ? '0' + self.decimal : oldNumber + value.toString();
           this.hasDecimal = true;
         } else {
           return;
@@ -171,24 +172,39 @@
         self.state = state.PUSH;
       }
       
-      
-      console.log('STATE: ', self.state);
-      
       /**
        * Der Punkt muss evtl. wieder durch ein Komma ersetzt werden
        */
-      if (komma) {
-        newNumber = newNumber.replace(/\./g, ',');
-      }
       
+      newNumber = self.correctDecimalSign(newNumber);
       this.display.html(newNumber);
+
+    };
+    
+    Durchflussrechner.prototype.getDecimalSign = function(){
+      return $('#' + self.id + ' #decimal').text();
+    };
+    
+    Durchflussrechner.prototype.correctDecimalSign = function(number){      
+      switch(self.decimal){
+        case ',':
+          number = number.replace(/\./g, ',');
+          break;
+        case '.':
+          number = number.replace(/\,/g, '.');
+          break;
+        default: 
+          alert('There is an error in the HTML-Markup!');
+        break;
+      }
+      return number;
     };
 
     Durchflussrechner.prototype.setResult = function(value) {
-      self.result = parseFloat(value);
-      var result_display = self.result;
-      
-      if(!isFinite(self.result)){
+      self.result = parseFloat(value.toPrecision(self.precision)); //Die eigentliche Zahl
+      var result_display = self.correctDecimalSign(self.result.toString()); //Die Ausgabe der Zahl
+
+      if(!isFinite(self.result) || isNaN(self.result)){
         result_display = 'ERROR';
         self.clearDurchflussrechner();
         /**
@@ -197,11 +213,10 @@
       }
       
       $('#' + self.id + ' ' + '#result').html(result_display);
-      console.log('self.result', self.result);
     };
 
     Durchflussrechner.prototype.getResult = function() {
-      this.result = parseFloat($('#' + self.id + ' ' + '#result').text());
+      this.result = parseFloat($('#' + self.id + ' ' + '#result').text().toString().replace(/,/g, '.'));
       return this.result;
     };
 
@@ -216,28 +231,33 @@
       return this.operation;
     };
 
+    /**
+     * Überprüft das eingegebene Dezimal-Zeichen und setzt sefl.hasDecimal und self.decimal
+     * 
+     * @returns {Boolean}
+     */
     Durchflussrechner.prototype.checkDecimal = function() {
+      //Prüfe, ob ein Decimal-Zeichen eingegeben wurde
       var check = false;
       if (this.display.text().indexOf(',') >= 0 || this.display.text().indexOf('.') >= 0) {
         check = true;
       }
       this.hasDecimal = check;
+      
+      //Gucke nach, welches Decimal-Zeichen benutzt werden sollte
+      self.decimal = self.getDecimalSign();
+      
       return check;
     };
 
-    Durchflussrechner.prototype.clearDisplay = function() {
-      this.setResult(0);
-    };
-
-    Durchflussrechner.prototype.clearAll = function() {
-      this.clearDisplay();
-      this.clearDurchflussrechner();
-    };
-
     Durchflussrechner.prototype.clearDurchflussrechner = function() {
-      this.operand = null;
-      this.operation = null;
-      self.state = state.NEW;
+      self.result = 0;
+      self.operand = null;
+      self.operation = null;
+      self.state = state.PUSH;
+      self.a = null;
+      self.b = null;
+      self.ab_speichern = false;
     };
 
     Durchflussrechner.prototype.getFunctionByName = function(name) {
@@ -266,15 +286,18 @@
       
       if(id === rechnermodus.CV || id === rechnermodus.DURCHFLUSS){
 
+        //Höhe der View anpassen
         $('#' + this.id + ' #Fluss_view')
               .css('display', 'block')                                                   //View anzeigen
               .css('width', $('#' + this.id + ' .middle#Rechner_view').css('width'))     //Breite angleichen
               .css('height', $('#' + this.id + ' .middle#Rechner_view').css('height'));  //Höhe angleichen
         
+        //Operationen und rechte Seite ausblenden
         $('#' + this.id + ' .button#Rechner').css('display', 'block');
         $('#' + this.id +  ' .button#CE, .button#clear').css('display', 'none');
         $('#' + this.id +  ' .right').css('display', 'none');
         
+        //Je nach Modus muss der Durchfluss-Wert oder CV-Wert angezeigt werden
         switch (id){
           case 'CV':
             $('#' + this.id + ' .' + id + '_view').css('display', 'block');
@@ -288,8 +311,9 @@
             break;
         }
         
+      //Im Rechner-Modus müssen wieder die normalen Buttons angezeigt werden
       }else if(id === rechnermodus.RECHNER){
-        $('#' + this.id + ' #Rechner_view').css('display', 'block')                                                   //View anzeigen
+        $('#' + this.id + ' #Rechner_view').css('display', 'block');                                                   //View anzeigen
         $('#' + this.id + ' .button#Rechner').css('display', 'none');
         $('#' + this.id + ' .button#CE, .button#clear').css('display', 'inline-block');
         $('#' + this.id +  ' .right').css('display', 'block');
@@ -344,25 +368,14 @@
     };    
     
     
+
+    
     /**
      * 
      * Formeln für die Berechnung des Durchfluss und des CV-Werts
      * 
-CV
-    Gase:
-        ((2*parameter.durchfluss_wert/28.3)/((parameter.eingangsdruck*14.5)+14.7))*Math.sqrt(parameter.gravitivität);
-    Flüssigkeiten:
-        (parameter.durchfluss_wert/3.78*Math.sqrt(parameter.gravitivität))/(Math.sqrt((parameter.eingangsdruck-parameter.ausgangsdruck)*14.5));
-
-Durchfluss
-    Gase:
-        Math.round(parameter.cv_wert*28.3/2/Math.sqrt(parameter.gravitivität)*((parameter.eingangsdruck*14.5)+14.7));
-    Flüssigkeiten:
-        Math.round(parameter.cv_wert/Math.sqrt(parameter.gravitivität)*(Math.sqrt(parameter.eingangsdruck-parameter.ausgangsdruck)*14.5)*3.78);
-     * 
-     * @returns parameter
+     * @returns {unresolved}
      */
-    
     Durchflussrechner.prototype.berechneFluss = function() {
       var result = 0;
       var type = parseInt($('#' + self.id +  ' #durchflusstype').val());
@@ -386,10 +399,12 @@ Durchfluss
       console.log('Parameter', parameter);
       switch(type){
         case durchflusstype.GASE:
-          return ((2*parameter.durchfluss_wert/28.3)/((parameter.eingangsdruck*14.5)+14.7))*Math.sqrt(parameter.gravitivitaet);
+          var formel_a = (2 * parameter.durchfluss_wert / 28.3) / ((parameter.eingangsdruck * 14.5) + 14.7) * Math.sqrt(parameter.gravitivitaet);
+          var formel_b = parameter.durchfluss_wert / 28.3 * Math.sqrt(parameter.gravitivitaet / (((parameter.eingangsdruck - parameter.ausgangsdruck) * 14.5) * (parameter.ausgangsdruck * 14.5 + 14.7)));
+          return (parameter.eingangsdruck < 2 * parameter.ausgangsdruck) ? formel_b : formel_a;
           break;
         case durchflusstype.FLUESSIGKEITEN:
-          return (parameter.durchfluss_wert/3.78*Math.sqrt(parameter.gravitivitaet))/(Math.sqrt((parameter.eingangsdruck - parameter.ausgangsdruck)*14.5));
+          return (parameter.durchfluss_wert / 3.78 * Math.sqrt(parameter.gravitivitaet)) / (Math.sqrt((parameter.eingangsdruck - parameter.ausgangsdruck) * 14.5));
           break;
         default:
           window.alert('Bitte auswählen...');
@@ -402,14 +417,12 @@ Durchfluss
       console.log('Parameter', parameter);
       switch(type){
         case durchflusstype.GASE:
-          return Math.round(parameter.cv_wert*28.3/2/Math.sqrt(parameter.gravitivitaet)*((parameter.eingangsdruck*14.5)+14.7));
+          var formel_a = parameter.cv_wert * 28.3 / 2 / Math.sqrt(parameter.gravitivitaet) * ( (parameter.eingangsdruck * 14.5) + 14.7 );
+          var formel_b = parameter.cv_wert * 28.3 / (Math.sqrt(parameter.gravitivitaet / ( ( (parameter.eingangsdruck - parameter.ausgangsdruck) * 14.5) * (parameter.ausgangsdruck * 14.5 + 14.7) ) ) );
+          return (parameter.eingangsdruck < 2 * parameter.ausgangsdruck) ? formel_b : formel_a;
           break;
         case durchflusstype.FLUESSIGKEITEN:
-          
-          console.log('cs_wert / Wurzel_Gravititvität', parameter.cv_wert/Math.sqrt(parameter.gravitivitaet));
-          console.log('Wurzel ein aus', (Math.sqrt(parameter.eingangsdruck - parameter.ausgangsdruck)*14.5));
-          
-          return Math.round(parameter.cv_wert/Math.sqrt(parameter.gravitivitaet)*(Math.sqrt(parameter.eingangsdruck - parameter.ausgangsdruck)*14.5)*3.78);
+          return (parameter.cv_wert / Math.sqrt(parameter.gravitivitaet)) * (Math.sqrt((parameter.eingangsdruck - parameter.ausgangsdruck) * 14.5) * 3.78);
           break;
         default:
           window.alert('Bitte auswählen...');
@@ -419,23 +432,22 @@ Durchfluss
     
     Durchflussrechner.prototype.getDurchflussParameter = function(){
       return {
-        cv_wert:       parseFloat($('#' + self.id + ' #cv_wert').val()), 
-        gravitivitaet: parseFloat($('#' + self.id + ' #gravitivitaet').val()), 
-        eingangsdruck: parseFloat($('#' + self.id + ' #eingangsdruck').val()), 
-        ausgangsdruck: parseFloat($('#' + self.id + ' #ausgangsdruck').val()), 
+        cv_wert:       parseFloat($('#' + self.id + ' #cv_wert').val().replace(/,/g, '.')), 
+        gravitivitaet: parseFloat($('#' + self.id + ' #gravitivitaet').val().replace(/,/g, '.')), 
+        eingangsdruck: parseFloat($('#' + self.id + ' #eingangsdruck').val().replace(/,/g, '.')), 
+        ausgangsdruck: parseFloat($('#' + self.id + ' #ausgangsdruck').val().replace(/,/g, '.'))
       };
     };
     
     
     Durchflussrechner.prototype.getCVParameter = function(){
       return {
-        durchfluss_wert:       parseFloat($('#' + self.id + ' #durchfluss_wert').val()), 
-        gravitivitaet:         parseFloat($('#' + self.id + ' #gravitivitaet').val()), 
-        eingangsdruck:         parseFloat($('#' + self.id + ' #eingangsdruck').val()), 
-        ausgangsdruck:         parseFloat($('#' + self.id + ' #ausgangsdruck').val()), 
+        durchfluss_wert:       parseFloat($('#' + self.id + ' #durchfluss_wert').val().replace(/,/g, '.')), 
+        gravitivitaet:         parseFloat($('#' + self.id + ' #gravitivitaet').val().replace(/,/g, '.')), 
+        eingangsdruck:         parseFloat($('#' + self.id + ' #eingangsdruck').val().replace(/,/g, '.')), 
+        ausgangsdruck:         parseFloat($('#' + self.id + ' #ausgangsdruck').val().replace(/,/g, '.'))
       };
     };
-    
     
     /**
      * 
@@ -446,9 +458,6 @@ Durchfluss
     self.initBindings();
 
   };
-
-
-
 
   $(function() {
     var durchflussrechner = new Durchflussrechner('durchflussrechner');

@@ -1,0 +1,275 @@
+#durchflussrechner
+{
+  font-family:'DroidSansRegular',DroidSansRegular,Arial,'Helvetica Neue',Helvetica,sans-serif ;
+  font-size: 1.0em;
+}
+
+
+/* Containers */
+#durchflussrechner .container {
+  /*width: 530px;*/
+}
+
+#durchflussrechner .calculator {
+  display: inline-block;
+  text-align: left;
+  padding:15px 0 0 30px;
+}
+
+#durchflussrechner label {
+  width:70px;
+  float:left;
+  margin-left:90px;
+  display: block;
+}
+
+#durchflussrechner input{
+  height: 18px;
+  line-height: 18px;
+}
+
+#durchflussrechner .display {
+  display: block;
+  overflow:hidden;
+  text-align: right;
+  color: black;
+  font-size: 1.0em;  
+  margin:0;
+}
+
+#durchflussrechner .row {
+  margin-bottom:10px;
+}
+
+/* Linke Seite */
+#durchflussrechner .left {
+  float:left;
+  max-width:145px;
+}
+#durchflussrechner .left .button {
+  width:70px;
+  display:inline-block;
+}
+#durchflussrechner .left .button-label {
+  padding-left:25px;
+  display:block;
+}
+#durchflussrechner .left .clear {
+  clear:both;
+}
+#durchflussrechner .left div div{
+  float:left;
+}
+#durchflussrechner .left .large .button{
+  float:left;
+  width:145px;
+}	
+#durchflussrechner .left .large .button-label {
+  padding-left:0;
+}
+#durchflussrechner div.yellow {
+  color:#f7a31d;
+}
+/* Mitte des Rechnerblocks*/
+#durchflussrechner .middle {
+  float:left;
+  margin-left:30px;
+}
+#durchflussrechner .middle .button_right_no_corner, .right .button_right_no_corner {
+  border-radius: 10px 0px 0px 10px;
+
+}
+#durchflussrechner .middle .button_no_corner {
+  border-radius:0;
+  border-left:1px solid #4db3d5;
+  border-right: 1px solid #4db3d5;
+  margin-left:-4px;
+}
+#durchflussrechner .middle .button_left_no_corner, .right .button_left_no_corner {
+  border-radius: 0px 10px 10px 0px;
+  margin-left:-5px;
+}
+#durchflussrechner .right .button_left_no_corner {
+  border-left:1px solid #4db3d5;
+}
+
+/*  Rechte Seite des Rechners */
+#durchflussrechner .right {
+  margin-left:5px;
+  float:left;
+  max-width:145px;
+}
+#durchflussrechner .right .button {
+  float:left;
+}
+
+#durchflussrechner .button {
+  display: table-cell;
+  vertical-align: middle;
+  height: 35px;
+  color: #818181;
+  font-family: 'Segoe UI Semibold', Calibri, Arial, Helvetica;
+  border-radius: 10px;
+  width:70px;
+  margin-bottom:10px;
+  background-image: linear-gradient(bottom, rgb(83,182,215) 0%, rgb(192,231,248) 45%, rgb(199,234,250) 59%);
+  background-image: -o-linear-gradient(bottom, rgb(83,182,215) 0%, rgb(192,231,248) 45%, rgb(199,234,250) 59%);
+  background-image: -moz-linear-gradient(bottom, rgb(83,182,215) 0%, rgb(192,231,248) 45%, rgb(199,234,250) 59%);
+  background-image: -webkit-linear-gradient(bottom, rgb(83,182,215) 0%, rgb(192,231,248) 45%, rgb(199,234,250) 59%);
+  background-image: -ms-linear-gradient(bottom, rgb(83,182,215) 0%, rgb(192,231,248) 45%, rgb(199,234,250) 59%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(83,182,215)),
+    color-stop(0.45, rgb(192,231,248)),
+    color-stop(0.59, rgb(199,234,250))
+    );
+
+}
+
+#durchflussrechner .button:hover {
+  background-image: linear-gradient(bottom, rgb(177,212,224) 0%, rgb(240,251,255) 54%, rgb(252,254,255) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(177,212,224) 0%, rgb(240,251,255) 54%, rgb(252,254,255) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(177,212,224) 0%, rgb(240,251,255) 54%, rgb(252,254,255) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(177,212,224) 0%, rgb(240,251,255) 54%, rgb(252,254,255) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(177,212,224) 0%, rgb(240,251,255) 54%, rgb(252,254,255) 100%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(177,212,224)),
+    color-stop(0.54, rgb(240,251,255)),
+    color-stop(1, rgb(252,254,255))
+    );
+}
+
+
+#durchflussrechner .button-label {
+  text-align: center;
+  vertical-align: middle;
+}
+
+#durchflussrechner .button-symbol {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+
+
+/* ergebnis */
+#durchflussrechner #result {
+  float:left;
+  text-align: right;
+  padding-right:20px;
+  width:330px;
+  -moz-box-shadow: inset 0 0 5px 1px #aaa;
+  -webkit-box-shadow: inset 0 0 5px 1px#aaa;
+  box-shadow: inset 0 0 5px 1px #aaa;
+  margin-right:15px;
+}
+
+/* Durchfluss_view und CV_view sollen zu Beginn unsichtbar sein */
+
+#durchflussrechner #Fluss_view,
+#durchflussrechner #Rechner
+/* #durchflussrechner .Fluessigkeiten_view */
+{
+  display: none;
+}
+
+
+/* Windows Phone-size phone */
+
+@media screen and (min-width:321px) and (max-width: 480px) {
+
+  #durchflussrechner .display {
+    width: 284px;
+  }
+
+  #durchflussrechner .button {
+    width: 60px;
+    height: 38px;
+  }
+
+  #durchflussrechner .button-label {
+    line-height: 38px;
+    width: 60px;
+  }
+
+  #durchflussrechner .button-symbol {
+    line-height: 38px;
+    width: 60px;
+  }
+
+  #durchflussrechner .tape {
+    display: none;
+  }
+}
+
+
+/* iPhone-size smartphone, portrait */
+
+@media screen and (max-width : 320px) {
+
+  #durchflussrechner .display {
+    width: 204px;
+    font-size: 1.2em;
+  }
+
+  #durchflussrechner .button {
+    width: 40px;
+    height: 25px;
+  }
+
+  #durchflussrechner .button-label {
+    line-height: 25px;
+    width: 40px;
+    font-size: 1.0em;
+  }
+
+  #durchflussrechner .button-symbol {
+    line-height: 25px;
+    width: 40px;
+    font-size: 1.2em;
+  }
+
+  #durchflussrechner .tape {
+    display: none;
+  }
+}
+
+
+/* iPhone-size smartphone / landscape */
+
+@media screen and (max-height : 320px) and (orientation : landscape) {
+
+  #durchflussrechner .display {
+    width: 204px;
+    font-size: 1.2em;
+  }
+
+  #durchflussrechner .button {
+    width: 40px;
+    height: 25px;
+  }
+
+  #durchflussrechner .button-label {
+    line-height: 25px;
+    width: 40px;
+    font-size: 1.0em;
+  }
+
+  #durchflussrechner .button-symbol {
+    line-height: 25px;
+    width: 40px;
+    font-size: 1.2em;
+  }
+
+  #durchflussrechner .tape {
+    display: none;
+  }
+}
